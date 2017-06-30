@@ -28,7 +28,7 @@ fi
 mkdir -p packages
 chmod a+w packages
 
-docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build $VM  /bin/bash <<END
+docker run ${KEEP} -i -t --volume $(pwd)/packages:/home/nistmni/build $VM  /bin/bash <<END
 mkdir src
 cd src
 git clone --recursive --branch develop https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2

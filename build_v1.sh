@@ -20,7 +20,7 @@ echo "PARALLEL=$PARALLEL"
 mkdir -p packages
 chmod a+w packages
 
-docker run --rm -i --volume $(pwd)/packages:/home/nistmni/build $VM  /bin/bash <<END
+docker run --rm -i -t --volume $(pwd)/packages:/home/nistmni/build $VM  /bin/bash <<END
 mkdir src
 cd src
 git clone --recursive --branch develop https://github.com/BIC-MNI/minc-toolkit.git minc-toolkit
