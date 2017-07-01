@@ -64,9 +64,10 @@ cmake ../../minc-toolkit-v2 \
 -DUSE_SYSTEM_PCRE:BOOL=OFF   \
 -DUSE_SYSTEM_ZLIB:BOOL=OFF  && \
 make -j${PARALLEL} &&
-make test > ~/build/test_${VM}_v2.txt &&
 cpack -G ${OUT} &&
 cp -v *.rpm *.deb ~/build/
+# run tests separately
+make test > ~/build/test_${VM}_v2.txt
 END
 
 exit
