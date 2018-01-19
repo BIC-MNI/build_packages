@@ -28,15 +28,16 @@ fi
 mkdir -p packages
 chmod a+w packages
 
-docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build $VM  /bin/bash <<END
+docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build --volume $(pwd)/cache:/home/nistmni/cache $VM  /bin/bash <<END
 mkdir src
 cd src
-git clone --recursive --branch develop https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2
+git clone --recursive --branch develop-1.9.16 https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2
 mkdir -p build/minc-toolkit-v2
 cd build/minc-toolkit-v2
+ln -s /home/nistmni/cache
 cmake ../../minc-toolkit-v2 \
 -DCMAKE_BUILD_TYPE:STRING=Release   \
--DCMAKE_INSTALL_PREFIX:PATH=/opt/minc/1.9.15 \
+-DCMAKE_INSTALL_PREFIX:PATH=/opt/minc/1.9.16 \
 -DMT_BUILD_ABC:BOOL=ON   \
 -DMT_BUILD_ANTS:BOOL=ON   \
 -DMT_BUILD_C3D:BOOL=ON   \
