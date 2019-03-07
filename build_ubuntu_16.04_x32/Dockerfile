@@ -1,4 +1,4 @@
-FROM ioft/i386-ubuntu:16.04
+FROM i386/ubuntu:xenial
 
 # install basic system packages
 RUN apt-get -y update && \

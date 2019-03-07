@@ -1,4 +1,4 @@
-FROM ioft/i386-ubuntu:14.04
+FROM i386/ubuntu:trusty
 
 # install basic system packages
 RUN apt-get -y update && \
