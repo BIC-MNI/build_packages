@@ -23,14 +23,14 @@ RUN useradd -ms /bin/bash nistmni && \
 # add new cmake
 RUN mkdir src && \
     cd src && \
-    wget https://cmake.org/files/v3.8/cmake-3.8.0.tar.gz  && \
-    tar zxf cmake-3.8.0.tar.gz && \
-    cd cmake-3.8.0 && \
-    ./configure --prefix=/usr --no-server --no-qt-gui --enable-ccache && \
+    curl --output cmake-3.13.4.tar.gz https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz  && \
+    tar zxf cmake-3.13.4.tar.gz && \
+    cd cmake-3.13.4 && \
+    ./configure --prefix=/usr --no-qt-gui --enable-ccache && \
     make && \
     make install && \
     cd ../../ && \
-    rm -rf src 
+    rm -rf src
 
 USER nistmni
 ENV HOME /home/nistmni
