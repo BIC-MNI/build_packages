@@ -1,5 +1,8 @@
 FROM centos:7
 
+#Install EPEL
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
 # install basic system packages
 RUN \
     yum -y update && \

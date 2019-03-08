@@ -1,5 +1,8 @@
 FROM centos:6
 
+#Install EPEL repo
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+
 # install basic system packages
 RUN \
     yum -y update && \
