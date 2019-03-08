@@ -24,14 +24,17 @@ fi
 
 # make sure output directory is writable to the container
 mkdir -p packages
+mkdir -p cache
 chmod a+w packages
+chmod a+w cache
 
-docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build $VM  /bin/bash <<END
+docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build -v $(pwd)/cache:/home/nistmni/cache $VM  /bin/bash <<END
 mkdir src
 cd src
 git clone --recursive --branch develop https://github.com/BIC-MNI/minc-toolkit.git minc-toolkit
 mkdir -p build/minc-toolkit
 cd build/minc-toolkit
+ln -s /home/nistmni/cache
 cmake ../../minc-toolkit \
 -DCMAKE_BUILD_TYPE:STRING=Release   \
 -DCMAKE_INSTALL_PREFIX:PATH=/opt/minc/1.0.09 \

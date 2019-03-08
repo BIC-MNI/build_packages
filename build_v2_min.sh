@@ -26,9 +26,11 @@ fi
 
 # make sure output directory is writable to the container
 mkdir -p packages/min
+mkdir -p cache
 chmod a+w packages/min
+chmod a+w cache
 
-docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build --volume $(pwd)/cache:/home/nistmni/cache $VM  /bin/bash <<END
+docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build -v $(pwd)/cache:/home/nistmni/cache $VM  /bin/bash <<END
 mkdir src
 cd src
 git clone --recursive --branch develop-1.9.16 https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2
