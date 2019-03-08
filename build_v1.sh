@@ -2,25 +2,31 @@
 
 VM=$1
 OUT=$2
+KEEP=$3
 
 if [ -z $OUT ];then
-echo "Usage $0 <vm> <DEB|RPM>"
-exit
+  echo "Usage $0 <vm> <DEB|RPM> [keep]"
+  exit
 fi
 
 if [ -z $PARALLEL ];then
-PARALLEL=3
+  PARALLEL=3
 fi
 
-
-echo "Running docker on $VM "
+echo "Running docker on $VM"
 echo "PARALLEL=$PARALLEL"
+
+if [ -z $KEEP ];then
+  KEEP="--rm"
+else
+  KEEP=""
+fi
 
 # make sure output directory is writable to the container
 mkdir -p packages
 chmod a+w packages
 
-docker run --rm -i --volume $(pwd)/packages:/home/nistmni/build $VM  /bin/bash <<END
+docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build $VM  /bin/bash <<END
 mkdir src
 cd src
 git clone --recursive --branch develop https://github.com/BIC-MNI/minc-toolkit.git minc-toolkit
