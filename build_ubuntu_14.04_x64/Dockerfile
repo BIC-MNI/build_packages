@@ -20,13 +20,15 @@ RUN useradd -ms /bin/bash nistmni && \
     echo "nistmni ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/nistmni && \
     chmod 0440 /etc/sudoers.d/nistmni
 
+ENV PATH=/usr/lib/ccache:$PATH
+
 # add new cmake
 RUN mkdir src && \
     cd src && \
-    curl --output cmake-3.13.4.tar.gz https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz  && \
+    curl -L --output cmake-3.13.4.tar.gz https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz  && \
     tar zxf cmake-3.13.4.tar.gz && \
     cd cmake-3.13.4 && \
-    ./configure --prefix=/usr --no-qt-gui --enable-ccache && \
+    ./configure --prefix=/usr --no-qt-gui && \
     make && \
     make install && \
     cd ../../ && \
