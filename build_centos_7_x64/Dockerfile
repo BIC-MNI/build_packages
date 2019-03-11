@@ -6,14 +6,21 @@ RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.n
 # install basic system packages
 RUN \
     yum -y update && \
-    yum -y install deltarpm redhat-lsb-core wget bc which && \
-    yum -y groupinstall 'Development Tools'  && \
+    yum -y install deltarpm && \
+    yum -y install rpm-build && \
+    curl -L https://raw.githubusercontent.com/WatershedArts/fake-lpr/master/fake-lpr.spec --output fake-lpr.spec && \
+    rpmbuild -ba fake-lpr.spec && \
+    yum -y install /root/rpmbuild/RPMS/noarch/fake-lpr-1.0-1.noarch.rpm && \
+    yum -y install redhat-lsb-core bc which && \
+    yum -y --exclude=systemtap* --exclude=subversion* --exclude=gettext-devel* --exclude=intltool* --exclude=cairo* --exclude=swig* groupinstall 'Development Tools' && \
+    yum -y install gcc-c++ gcc-gfortran bison flex && \
     yum -y install sudo libX11-devel libXmu-devel libXi-devel \
                    mesa-libGL-devel mesa-libGLU-devel \
                    libjpeg-turbo-devel openjpeg-devel \
                    openssl-devel rpm-build-libs rpm-devel ccache && \
     yum -y autoremove && \
-    yum -y clean all 
+    yum -y clean all && \
+    rm -rf /var/cache/yum/* /tmp/* /var/tmp/*
 
 # add user to build all tools
 RUN useradd -ms /bin/bash nistmni && \

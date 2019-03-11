@@ -6,19 +6,26 @@ RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.n
 # install basic system packages
 RUN \
     yum -y update && \
-    yum -y install deltarpm redhat-lsb-core wget bc which && \
-    yum -y groupinstall 'Development Tools'  && \
+    yum -y install deltarpm && \
+    yum -y install rpm-build && \
+    curl -L https://raw.githubusercontent.com/WatershedArts/fake-lpr/master/fake-lpr.spec --output fake-lpr.spec && \
+    rpmbuild -ba fake-lpr.spec && \
+    yum -y install /root/rpmbuild/RPMS/noarch/fake-lpr-1.0-1.noarch.rpm && \
+    yum -y install redhat-lsb-core bc which && \
+    yum -y --exclude=systemtap* --exclude=subversion* --exclude=gettext-devel* --exclude=intltool* --exclude=cairo* --exclude=swig* groupinstall 'Development Tools' && \
+    yum -y install gcc-c++ gcc-gfortran bison flex && \
     yum -y install sudo libX11-devel libXmu-devel libXi-devel \
                    mesa-libGL-devel mesa-libGLU-devel \
                    openssl-devel rpm-build-libs rpm-devel ccache && \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/*
 
+
 # Install newer gcc, binutils, gfortran, libjpegturbo
 # `rpm --import` related to centos 6 bug 0008226
-RUN wget -O /etc/yum.repos.d/devtools-2.repo http://people.centos.org/tru/devtools-2/devtools-2.repo && \
-    wget -O /etc/yum.repos.d/libjpeg-turbo.repo https://libjpeg-turbo.org/pmwiki/uploads/Downloads/libjpeg-turbo.repo && \
-    rpm --import "http://pgp.mit.edu/pks/lookup?op=get&search=0x85C7044E033FDE16" && \
+RUN curl -L --output /etc/yum.repos.d/devtools-2.repo https://people.centos.org/tru/devtools-2/devtools-2.repo && \
+    curl -L --output /etc/yum.repos.d/libjpeg-turbo.repo https://libjpeg-turbo.org/pmwiki/uploads/Downloads/libjpeg-turbo.repo && \
+    gpg --keyserver keyserver.ubuntu.com --recv 0x85C7044E033FDE16 && \
     rm -rf /usr/lib64/libjpeg* && \
     yum install -y -q devtoolset-2-gcc-c++ \
                       devtoolset-2-binutils \
@@ -28,6 +35,7 @@ RUN wget -O /etc/yum.repos.d/devtools-2.repo http://people.centos.org/tru/devtoo
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/* && \
     ln -sfv /opt/libjpeg-turbo/lib64/lib*.so* /usr/lib64 && \
     ln -sfv /opt/libjpeg-turbo/include/*.h /usr/include
+
 ENV PATH=/opt/rh/devtoolset-2/root/usr/bin:$PATH
 
 # add user to build all tools
