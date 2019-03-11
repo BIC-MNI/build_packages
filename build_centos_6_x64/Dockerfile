@@ -10,7 +10,7 @@ RUN \
     yum -y groupinstall 'Development Tools'  && \
     yum -y install sudo libX11-devel libXmu-devel libXi-devel \
                    mesa-libGL-devel mesa-libGLU-devel \
-                   openssl-devel rpm-build-libs rpm-devel && \
+                   openssl-devel rpm-build-libs rpm-devel ccache && \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/*
 

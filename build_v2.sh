@@ -27,10 +27,13 @@ fi
 # make sure output directory is writable to the container
 mkdir -p packages
 mkdir -p cache
+mkdir -p ccache
 chmod a+w packages
 chmod a+w cache
+chmod a+w ccache
 
-docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build -v $(pwd)/cache:/home/nistmni/cache $VM  /bin/bash <<END
+docker run ${KEEP} -i -v $(pwd)/packages:/home/nistmni/build -v $(pwd)/cache:/home/nistmni/cache -v $(pwd)/ccache:/ccache $VM  /bin/bash <<END
+export CCACHE_DIR=/ccache
 mkdir src
 cd src
 git clone --recursive --branch develop-1.9.16 https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2

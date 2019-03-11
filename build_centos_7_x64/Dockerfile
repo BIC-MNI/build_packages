@@ -11,7 +11,7 @@ RUN \
     yum -y install sudo libX11-devel libXmu-devel libXi-devel \
                    mesa-libGL-devel mesa-libGLU-devel \
                    libjpeg-turbo-devel openjpeg-devel \
-                   openssl-devel rpm-build-libs rpm-devel && \
+                   openssl-devel rpm-build-libs rpm-devel ccache && \
     yum -y autoremove && \
     yum -y clean all 
 
