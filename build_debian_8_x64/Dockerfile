@@ -12,7 +12,7 @@ RUN apt-get -y update && \
          libxmu6 libxmu-dev libxmu-headers \
          libgl1-mesa-dev libglu1-mesa-dev \
          libjpeg-dev \
-         wget libssl-dev ccache  git lsb-release && \
+         libssl-dev ccache git lsb-release curl ca-certificates && \
     apt-get autoclean && \
     rm -rf /var/lib/apt/lists/*
 
