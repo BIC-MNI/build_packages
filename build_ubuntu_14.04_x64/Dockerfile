@@ -2,7 +2,8 @@ FROM ubuntu:trusty
 
 # install basic system packages
 RUN apt-get -y update && \
-    apt-get install -y \
+    apt-get -y dist-upgrade && \
+    apt-get install -y --no-install-recommends \
          sudo \
          build-essential g++ gfortran bc \
          bison flex \
