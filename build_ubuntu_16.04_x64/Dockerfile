@@ -13,7 +13,7 @@ RUN apt-get -y update && \
          libgl1-mesa-dev libglu1-mesa-dev \
          libjpeg-dev \
          libssl-dev ccache libapt-inst2.0 git lsb-release \
-         curl ca-certificates && \
+         curl ca-certificates unzip && \
     apt-get autoclean && \
     rm -rf /var/lib/apt/lists/*
 
