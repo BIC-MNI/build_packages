@@ -23,20 +23,20 @@ RUN \
 
 # Install newer gcc, binutils, gfortran, libjpegturbo
 # `rpm --import` related to centos 6 bug 0008226
-RUN curl -L --output /etc/yum.repos.d/devtools-2.repo https://people.centos.org/tru/devtools-2/devtools-2.repo && \
+RUN yum install -y centos-release-scl && \
     curl -L --output /etc/yum.repos.d/libjpeg-turbo.repo https://libjpeg-turbo.org/pmwiki/uploads/Downloads/libjpeg-turbo.repo && \
     gpg --keyserver keyserver.ubuntu.com --recv 0x85C7044E033FDE16 && \
     rm -rf /usr/lib64/libjpeg* && \
-    yum install -y -q devtoolset-2-gcc-c++ \
-                      devtoolset-2-binutils \
-                      devtoolset-2-gcc-gfortran \
+    yum install -y -q devtoolset-6-gcc-c++ \
+                      devtoolset-6-binutils \
+                      devtoolset-6-gcc-gfortran \
                       libjpeg-turbo-official-1.3.1-20140321.x86_64 && \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/* && \
     ln -sfv /opt/libjpeg-turbo/lib64/lib*.so* /usr/lib64 && \
     ln -sfv /opt/libjpeg-turbo/include/*.h /usr/include
 
-ENV PATH=/opt/rh/devtoolset-2/root/usr/bin:$PATH
+ENV PATH=/opt/rh/devtoolset-6/root/usr/bin:$PATH
 
 # add user to build all tools
 RUN useradd -ms /bin/bash nistmni && \
