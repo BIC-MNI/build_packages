@@ -5,39 +5,46 @@ OUT=$2
 KEEP=$3
 
 if [ -z $OUT ];then
-echo "Usage $0 <vm> <DEB|RPM> [keep]"
-exit
+  echo "Usage $0 <vm> <DEB|RPM> [keep]"
+  exit
 fi
 
-VM=$1
-
 if [ -z $PARALLEL ];then
-PARALLEL=3
+  PARALLEL=3
 fi
 
 echo "Running docker on $VM"
 echo "PARALLEL=$PARALLEL"
 
 if [ -z $KEEP ];then
- KEEP="--rm"
+  KEEP="--rm"
 else
- KEEP=""
+  KEEP=""
 fi
 
 # make sure output directory is writable to the container
 mkdir -p packages
+mkdir -p cache
+mkdir -p ccache
 chmod a+w packages
+chmod a+w cache
+chmod a+w ccache
 
-docker run ${KEEP} -i --volume $(pwd)/packages:/home/nistmni/build --volume $(pwd)/cache:/home/nistmni/cache $VM  /bin/bash <<END
+docker run ${KEEP} -i -v $(pwd)/packages:/home/nistmni/build -v $(pwd)/cache:/home/nistmni/cache -v $(pwd)/ccache:/ccache $VM  /bin/bash <<END
+set -x
+export CCACHE_DIR=/ccache
 mkdir src
 cd src
-git clone --recursive --branch develop-1.9.16 https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2
+git clone --recursive --branch develop-1.9.17 https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2
+VERSION="\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_MAJOR [0-9]+" minc-toolkit-v2/CMakeLists.txt | cut -d " " -f 2)"
+VERSION="\${VERSION}.\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_MINOR [0-9]+" minc-toolkit-v2/CMakeLists.txt | cut -d " " -f 2)"
+VERSION="\${VERSION}.\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_PATCH [0-9]+" minc-toolkit-v2/CMakeLists.txt | cut -d " " -f 2)"
 mkdir -p build/minc-toolkit-v2
 cd build/minc-toolkit-v2
 ln -s /home/nistmni/cache
 cmake ../../minc-toolkit-v2 \
 -DCMAKE_BUILD_TYPE:STRING=Release   \
--DCMAKE_INSTALL_PREFIX:PATH=/opt/minc/1.9.16 \
+-DCMAKE_INSTALL_PREFIX:PATH=/opt/minc/\${VERSION} \
 -DMT_BUILD_ABC:BOOL=ON   \
 -DMT_BUILD_ANTS:BOOL=ON   \
 -DMT_BUILD_C3D:BOOL=ON   \

@@ -1,4 +1,4 @@
-FROM i386/ubuntu:xenial
+FROM debian:9
 
 # install basic system packages
 RUN apt-get -y update && \
@@ -12,8 +12,7 @@ RUN apt-get -y update && \
          libxmu6 libxmu-dev libxmu-headers \
          libgl1-mesa-dev libglu1-mesa-dev \
          libjpeg-dev \
-         libssl-dev ccache libapt-inst2.0 git lsb-release \
-         curl ca-certificates && \
+         libssl-dev ccache git lsb-release curl ca-certificates && \
     apt-get autoclean && \
     rm -rf /var/lib/apt/lists/*
 

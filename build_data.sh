@@ -5,23 +5,21 @@ OUT=$2
 KEEP=$3
 
 if [ -z $OUT ];then
-echo "Usage $0 <vm> <DEB|RPM> [keep]"
-exit
+  echo "Usage $0 <vm> <DEB|RPM> [keep]"
+  exit
 fi
 
-VM=$1
-
 if [ -z $PARALLEL ];then
-PARALLEL=3
+  PARALLEL=3
 fi
 
 echo "Running docker on $VM"
 echo "PARALLEL=$PARALLEL"
 
 if [ -z $KEEP ];then
- KEEP="--rm"
+  KEEP="--rm"
 else
- KEEP=""
+  KEEP=""
 fi
 
 # make sure output directory is writable to the container

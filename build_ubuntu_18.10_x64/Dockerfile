@@ -1,4 +1,4 @@
-FROM i386/ubuntu:xenial
+FROM ubuntu:cosmic
 
 # install basic system packages
 RUN apt-get -y update && \

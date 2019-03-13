@@ -1,4 +1,7 @@
-FROM centos:6
+FROM i386/centos:6
+
+#Fix broken i386 build https://github.com/CentOS/sig-cloud-instance-images/issues/94
+RUN echo "i386" > /etc/yum/vars/basearch
 
 #Install EPEL repo
 RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
@@ -20,23 +23,22 @@ RUN \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/*
 
-
 # Install newer gcc, binutils, gfortran, libjpegturbo
 # `rpm --import` related to centos 6 bug 0008226
-RUN yum install -y centos-release-scl && \
+RUN curl -L --output /etc/yum.repos.d/devtools-2.repo https://people.centos.org/tru/devtools-2/devtools-2.repo && \
     curl -L --output /etc/yum.repos.d/libjpeg-turbo.repo https://libjpeg-turbo.org/pmwiki/uploads/Downloads/libjpeg-turbo.repo && \
     gpg --keyserver keyserver.ubuntu.com --recv 0x85C7044E033FDE16 && \
-    rm -rf /usr/lib64/libjpeg* && \
-    yum install -y -q devtoolset-6-gcc-c++ \
-                      devtoolset-6-binutils \
-                      devtoolset-6-gcc-gfortran \
-                      libjpeg-turbo-official-1.3.1-20140321.x86_64 && \
+    rm -rf /usr/lib/libjpeg* && \
+    yum install -y -q devtoolset-2-gcc-c++ \
+                      devtoolset-2-binutils \
+                      devtoolset-2-gcc-gfortran \
+                      libjpeg-turbo-official-1.3.1-20140321.i386 && \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/* && \
-    ln -sfv /opt/libjpeg-turbo/lib64/lib*.so* /usr/lib64 && \
+    ln -sfv /opt/libjpeg-turbo/lib/lib*.so* /usr/lib && \
     ln -sfv /opt/libjpeg-turbo/include/*.h /usr/include
 
-ENV PATH=/opt/rh/devtoolset-6/root/usr/bin:$PATH
+ENV PATH=/opt/rh/devtoolset-2/root/usr/bin:$PATH
 
 # add user to build all tools
 RUN useradd -ms /bin/bash nistmni && \

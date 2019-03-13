@@ -1,7 +1,4 @@
-FROM centos:6
-
-#Install EPEL repo
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+FROM fedora:29
 
 # install basic system packages
 RUN \
@@ -16,27 +13,13 @@ RUN \
     yum -y install gcc-c++ gcc-gfortran bison flex && \
     yum -y install sudo libX11-devel libXmu-devel libXi-devel \
                    mesa-libGL-devel mesa-libGLU-devel \
-                   openssl-devel rpm-build-libs rpm-devel ccache && \
+                   libjpeg-turbo-devel openjpeg-devel \
+                   openssl-devel rpm-build-libs \
+                   fedora-packager rpm-devel ccache && \
+    yum -y autoremove && \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/*
 
-
-# Install newer gcc, binutils, gfortran, libjpegturbo
-# `rpm --import` related to centos 6 bug 0008226
-RUN yum install -y centos-release-scl && \
-    curl -L --output /etc/yum.repos.d/libjpeg-turbo.repo https://libjpeg-turbo.org/pmwiki/uploads/Downloads/libjpeg-turbo.repo && \
-    gpg --keyserver keyserver.ubuntu.com --recv 0x85C7044E033FDE16 && \
-    rm -rf /usr/lib64/libjpeg* && \
-    yum install -y -q devtoolset-6-gcc-c++ \
-                      devtoolset-6-binutils \
-                      devtoolset-6-gcc-gfortran \
-                      libjpeg-turbo-official-1.3.1-20140321.x86_64 && \
-    yum -y clean all && \
-    rm -rf /var/cache/yum/* /tmp/* /var/tmp/* && \
-    ln -sfv /opt/libjpeg-turbo/lib64/lib*.so* /usr/lib64 && \
-    ln -sfv /opt/libjpeg-turbo/include/*.h /usr/include
-
-ENV PATH=/opt/rh/devtoolset-6/root/usr/bin:$PATH
 
 # add user to build all tools
 RUN useradd -ms /bin/bash nistmni && \
