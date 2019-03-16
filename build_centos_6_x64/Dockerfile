@@ -24,19 +24,25 @@ RUN \
 # Install newer gcc, binutils, gfortran, libjpegturbo
 # `rpm --import` related to centos 6 bug 0008226
 RUN yum install -y centos-release-scl && \
+    yum install -y scl-utils scl-utils-build && \
     curl -L --output /etc/yum.repos.d/libjpeg-turbo.repo https://libjpeg-turbo.org/pmwiki/uploads/Downloads/libjpeg-turbo.repo && \
-    gpg --keyserver keyserver.ubuntu.com --recv 0x85C7044E033FDE16 && \
+    gpg --keyserver keys.gnupg.net --recv 0x85C7044E033FDE16 && \
     rm -rf /usr/lib64/libjpeg* && \
-    yum install -y -q devtoolset-6-gcc-c++ \
-                      devtoolset-6-binutils \
-                      devtoolset-6-gcc-gfortran \
+    yum install -y -q devtoolset-7-gcc-c++ \
+                      devtoolset-7-binutils \
+                      devtoolset-7-gcc-gfortran \
                       libjpeg-turbo-official-1.3.1-20140321.x86_64 && \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/* && \
     ln -sfv /opt/libjpeg-turbo/lib64/lib*.so* /usr/lib64 && \
-    ln -sfv /opt/libjpeg-turbo/include/*.h /usr/include
+    ln -sfv /opt/libjpeg-turbo/include/*.h /usr/include && \
+    cp -sfv /opt/rh/devtoolset-7/root/usr/bin/strip /usr/bin/strip
 
-ENV PATH=/opt/rh/devtoolset-6/root/usr/bin:$PATH
+ENV BASH_ENV=/opt/rh/devtoolset-7/enable \
+    ENV=/opt/rh/devtoolset-7/enable \
+    PROMPT_COMMAND=". /opt/rh/devtoolset-7/enable"
+
+SHELL ["/bin/bash", "-c"]
 
 # add user to build all tools
 RUN useradd -ms /bin/bash nistmni && \
@@ -58,3 +64,4 @@ RUN mkdir src && \
 USER nistmni
 ENV HOME /home/nistmni
 WORKDIR /home/nistmni
+

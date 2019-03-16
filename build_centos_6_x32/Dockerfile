@@ -36,9 +36,14 @@ RUN curl -L --output /etc/yum.repos.d/devtools-2.repo https://people.centos.org/
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/* && \
     ln -sfv /opt/libjpeg-turbo/lib/lib*.so* /usr/lib && \
-    ln -sfv /opt/libjpeg-turbo/include/*.h /usr/include
+    ln -sfv /opt/libjpeg-turbo/include/*.h /usr/include && \
+    cp -sfv /opt/rh/devtoolset-2/root/usr/bin/strip /usr/bin/strip
 
-ENV PATH=/opt/rh/devtoolset-2/root/usr/bin:$PATH
+ENV BASH_ENV=/opt/rh/devtoolset-2/enable \
+    ENV=/opt/rh/devtoolset-2/enable \
+    PROMPT_COMMAND=". /opt/rh/devtoolset-2/enable"
+
+SHELL ["/bin/bash", "-c"]
 
 # add user to build all tools
 RUN useradd -ms /bin/bash nistmni && \
