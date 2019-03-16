@@ -22,6 +22,22 @@ RUN \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/*
 
+# Install newer gcc, binutils, gfortran
+RUN yum install -y centos-release-scl && \
+    yum install -y scl-utils scl-utils-build && \
+    yum install -y -q devtoolset-7-gcc-c++ \
+                      devtoolset-7-binutils \
+                      devtoolset-7-gcc-gfortran && \
+    yum -y clean all && \
+    rm -rf /var/cache/yum/* /tmp/* /var/tmp/* && \
+    cp -sfv /opt/rh/devtoolset-7/root/usr/bin/strip /usr/bin/strip
+
+ENV BASH_ENV=/opt/rh/devtoolset-7/enable \
+    ENV=/opt/rh/devtoolset-7/enable \
+    PROMPT_COMMAND=". /opt/rh/devtoolset-7/enable"
+
+SHELL ["/bin/bash", "-c"]
+
 # add user to build all tools
 RUN useradd -ms /bin/bash nistmni && \
     echo "nistmni ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/nistmni && \
