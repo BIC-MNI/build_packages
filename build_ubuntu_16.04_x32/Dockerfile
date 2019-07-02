@@ -39,3 +39,4 @@ RUN mkdir src && \
 USER nistmni
 ENV HOME /home/nistmni
 WORKDIR /home/nistmni
+ENTRYPOINT ["/usr/bin/linux32", "--"]
