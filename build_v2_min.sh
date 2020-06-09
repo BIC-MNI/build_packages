@@ -35,7 +35,7 @@ set -x
 export CCACHE_DIR=/ccache
 mkdir src
 cd src
-git clone --recursive --branch develop-1.9.17 https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2
+git clone --recursive --branch develop-1.9.18 https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2
 VERSION="\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_MAJOR [0-9]+" minc-toolkit-v2/CMakeLists.txt | cut -d " " -f 2)"
 VERSION="\${VERSION}.\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_MINOR [0-9]+" minc-toolkit-v2/CMakeLists.txt | cut -d " " -f 2)"
 VERSION="\${VERSION}.\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_PATCH [0-9]+" minc-toolkit-v2/CMakeLists.txt | cut -d " " -f 2)"
@@ -47,7 +47,7 @@ cmake ../../minc-toolkit-v2 \
 -DCMAKE_INSTALL_PREFIX:PATH=/opt/minc/\${VERSION} \
 -DMT_BUILD_ABC:BOOL=OFF   \
 -DMT_BUILD_ANTS:BOOL=ON   \
--DMT_BUILD_C3D:BOOL=ON   \
+-DMT_BUILD_C3D:BOOL=OFF   \
 -DMT_BUILD_ELASTIX:BOOL=ON   \
 -DMT_BUILD_IM:BOOL=OFF   \
 -DMT_BUILD_ITK_TOOLS:BOOL=ON   \
