@@ -15,9 +15,10 @@ RUN apt-get -y update && \
          libjpeg-dev \
          libssl-dev ccache git lsb-release \
          curl ca-certificates \
-         apt-transport-https ca-certificates gnupg software-properties-common wget && \
+         apt-transport-https ca-certificates gnupg software-properties-common wget unzip && \
     wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && \
     apt-add-repository 'deb https://apt.kitware.com/ubuntu/ xenial main' -y && \
+    apt -y update && \
     apt-get install -y --no-install-recommends cmake && \
     apt-get autoclean && \
     rm -rf /var/lib/apt/lists/*
