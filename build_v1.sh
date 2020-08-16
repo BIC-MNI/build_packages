@@ -30,12 +30,12 @@ chmod a+w packages
 chmod a+w cache
 chmod a+w ccache
 
-docker run ${KEEP} -i -v $(pwd)/packages:/home/nistmni/build -v $(pwd)/cache:/home/nistmni/cache -v $(pwd)/ccache:/ccache $VM  /bin/bash <<END
+docker run ${KEEP} -i -v $(pwd)/minc-toolkit:/home/nistmni/minc-toolkit -v $(pwd)/packages:/home/nistmni/build -v $(pwd)/cache:/home/nistmni/cache -v $(pwd)/ccache:/ccache $VM  /bin/bash <<END
 set -x
 export CCACHE_DIR=/ccache
 mkdir src
 cd src
-git clone --recursive --branch develop https://github.com/BIC-MNI/minc-toolkit.git minc-toolkit
+ln -s /home/nistmni/minc-toolkit
 VERSION="\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_MAJOR [0-9]+" minc-toolkit/CMakeLists.txt | cut -d " " -f 2)"
 VERSION="\${VERSION}.\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_MINOR [0-9]+" minc-toolkit/CMakeLists.txt | cut -d " " -f 2)"
 VERSION="\${VERSION}.\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_PATCH [0-9]+" minc-toolkit/CMakeLists.txt | cut -d " " -f 2)"
