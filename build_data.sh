@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 
 VM=$1
 OUT=$2
