@@ -44,6 +44,9 @@ cd build/minc-toolkit-v2
 ln -s /home/nistmni/cache
 cmake ../../minc-toolkit-v2 \
 -DCMAKE_BUILD_TYPE:STRING=Release   \
+-DCMAKE_CXX_FLAGS_RELEASE:STRING="-O3 -DNDEBUG -mtune=generic -fcommon" \
+-DCMAKE_C_FLAGS_RELEASE:STRING="-O3 -DNDEBUG -mtune=generic -fcommon" \
+-DCMAKE_Fortran_FLAGS_RELEASE:STRING="-O3 -DNDEBUG -mtune=generic -fcommon" \
 -DCMAKE_INSTALL_PREFIX:PATH=/opt/minc/\${VERSION} \
 -DMT_BUILD_ABC:BOOL=ON   \
 -DMT_BUILD_ANTS:BOOL=ON   \

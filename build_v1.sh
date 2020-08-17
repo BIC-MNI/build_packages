@@ -44,6 +44,9 @@ cd build/minc-toolkit
 ln -s /home/nistmni/cache
 cmake ../../minc-toolkit \
 -DCMAKE_BUILD_TYPE:STRING=Release   \
+-DCMAKE_CXX_FLAGS_RELEASE:STRING="-O3 -DNDEBUG -mtune=generic -fcommon" \
+-DCMAKE_C_FLAGS_RELEASE:STRING="-O3 -DNDEBUG -mtune=generic -fcommon" \
+-DCMAKE_Fortran_FLAGS_RELEASE:STRING="-O3 -DNDEBUG -mtune=generic -fcommon" \
 -DCMAKE_INSTALL_PREFIX:PATH=/opt/minc/\${VERSION} \
 -DMNI_AUTOREG_OLD_AMOEBA_INIT:BOOL=ON \
 -DMT_BUILD_MINC_ANTS:BOOL=ON \
