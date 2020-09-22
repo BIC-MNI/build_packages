@@ -1,40 +1,27 @@
-FROM centos:7
+FROM centos:8
 
 #Install EPEL
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
+    yum -y install dnf-plugins-core && \
+    dnf config-manager --set-enabled PowerTools
 
 # install basic system packages
 RUN \
     yum -y update && \
-    yum -y install deltarpm && \
     yum -y install rpm-build && \
     curl -L https://raw.githubusercontent.com/WatershedArts/fake-lpr/master/fake-lpr.spec --output fake-lpr.spec && \
     rpmbuild -ba fake-lpr.spec && \
     yum -y install /root/rpmbuild/RPMS/noarch/fake-lpr-1.0-1.noarch.rpm && \
     yum -y install redhat-lsb-core bc which && \
-    yum -y --exclude=systemtap* --exclude=subversion* --exclude=gettext-devel* --exclude=intltool* --exclude=cairo* --exclude=swig* groupinstall 'Development Tools' && \
+    yum -y --exclude=systemtap* --exclude=subversion* --exclude=gettext-devel* --exclude=intltool* --exclude=swig* groupinstall 'Development Tools' && \
     yum -y install gcc-c++ gcc-gfortran bison flex && \
     yum -y install sudo libX11-devel libXmu-devel libXi-devel \
                    mesa-libGL-devel mesa-libGLU-devel \
-                   libjpeg-turbo-devel openjpeg-devel \
+                   libjpeg-turbo-devel openjpeg2-devel \
                    openssl-devel rpm-build-libs rpm-devel ccache && \
     yum -y autoremove && \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/*
-
-# Install newer gcc, binutils, gfortran
-RUN yum install -y centos-release-scl && \
-    yum install -y scl-utils scl-utils-build && \
-    yum install -y -q devtoolset-7-gcc-c++ \
-                      devtoolset-7-binutils \
-                      devtoolset-7-gcc-gfortran && \
-    yum -y clean all && \
-    rm -rf /var/cache/yum/* /tmp/* /var/tmp/* && \
-    cp -sfv /opt/rh/devtoolset-7/root/usr/bin/strip /usr/bin/strip
-
-ENV BASH_ENV=/opt/rh/devtoolset-7/enable \
-    ENV=/opt/rh/devtoolset-7/enable \
-    PROMPT_COMMAND=". /opt/rh/devtoolset-7/enable"
 
 SHELL ["/bin/bash", "-c"]
 
@@ -49,7 +36,7 @@ RUN mkdir src && \
     curl -L --output cmake-3.17.3.tar.gz https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3.tar.gz  && \
     tar zxf cmake-3.17.3.tar.gz && \
     cd cmake-3.17.3 && \
-    ./configure --prefix=/usr --no-qt-gui && \
+    ./configure --prefix=/usr --no-qt-gui -- -DBUILD_TESTING=OFF && \
     make && \
     make install && \
     cd ../../ && \

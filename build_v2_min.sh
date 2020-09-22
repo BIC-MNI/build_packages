@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 
 VM=$1
 OUT=$2
@@ -30,12 +30,12 @@ chmod a+w packages/min
 chmod a+w cache
 chmod a+w ccache
 
-docker run ${KEEP} -i -v $(pwd)/packages:/home/nistmni/build -v $(pwd)/cache:/home/nistmni/cache -v $(pwd)/ccache:/ccache $VM  /bin/bash <<END
+docker run ${KEEP} -i -v $(pwd)/minc-toolkit-v2:/home/nistmni/minc-toolkit-v2 -v $(pwd)/packages:/home/nistmni/build -v $(pwd)/cache:/home/nistmni/cache -v $(pwd)/ccache:/ccache $VM  /bin/bash <<END
 set -x
 export CCACHE_DIR=/ccache
 mkdir src
 cd src
-git clone --recursive --branch develop-1.9.17 https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2
+ln -s /home/nistmni/minc-toolkit-v2
 VERSION="\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_MAJOR [0-9]+" minc-toolkit-v2/CMakeLists.txt | cut -d " " -f 2)"
 VERSION="\${VERSION}.\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_MINOR [0-9]+" minc-toolkit-v2/CMakeLists.txt | cut -d " " -f 2)"
 VERSION="\${VERSION}.\$(grep -o -E "MINC_TOOLKIT_PACKAGE_VERSION_PATCH [0-9]+" minc-toolkit-v2/CMakeLists.txt | cut -d " " -f 2)"
@@ -44,10 +44,13 @@ cd build/minc-toolkit-v2
 ln -s /home/nistmni/cache
 cmake ../../minc-toolkit-v2 \
 -DCMAKE_BUILD_TYPE:STRING=Release   \
+-DCMAKE_CXX_FLAGS_RELEASE:STRING="-O3 -DNDEBUG -mtune=generic -fcommon" \
+-DCMAKE_C_FLAGS_RELEASE:STRING="-O3 -DNDEBUG -mtune=generic -fcommon" \
+-DCMAKE_Fortran_FLAGS_RELEASE:STRING="-O3 -DNDEBUG -mtune=generic -fcommon" \
 -DCMAKE_INSTALL_PREFIX:PATH=/opt/minc/\${VERSION} \
 -DMT_BUILD_ABC:BOOL=OFF   \
 -DMT_BUILD_ANTS:BOOL=ON   \
--DMT_BUILD_C3D:BOOL=ON   \
+-DMT_BUILD_C3D:BOOL=OFF   \
 -DMT_BUILD_ELASTIX:BOOL=ON   \
 -DMT_BUILD_IM:BOOL=OFF   \
 -DMT_BUILD_ITK_TOOLS:BOOL=ON   \
@@ -59,7 +62,6 @@ cmake ../../minc-toolkit-v2 \
 -DMT_BUILD_SHARED_LIBS:BOOL=ON \
 -DBUILD_TESTING:BOOL=ON \
 -DMT_BUILD_LITE:BOOL=OFF \
--DMT_BUILD_QUIET:BOOL=ON \
 -DUSE_SYSTEM_GLUT:BOOL=OFF \
 -DUSE_SYSTEM_FFTW3D:BOOL=OFF   \
 -DUSE_SYSTEM_FFTW3F:BOOL=OFF   \

@@ -1,4 +1,4 @@
-FROM fedora:28
+FROM fedora:32
 
 # install basic system packages
 RUN \
@@ -9,7 +9,7 @@ RUN \
     rpmbuild -ba fake-lpr.spec && \
     yum -y install /root/rpmbuild/RPMS/noarch/fake-lpr-1.0-1.noarch.rpm && \
     yum -y install redhat-lsb-core bc which && \
-    yum -y --exclude=systemtap* --exclude=subversion* --exclude=gettext-devel* --exclude=intltool* --exclude=cairo* --exclude=swig* groupinstall 'Development Tools' && \
+    yum -y --exclude=systemtap* --exclude=subversion* --exclude=gettext-devel* --exclude=intltool* --exclude=swig* groupinstall 'Development Tools' && \
     yum -y install gcc-c++ gcc-gfortran bison flex && \
     yum -y install sudo libX11-devel libXmu-devel libXi-devel \
                    mesa-libGL-devel mesa-libGLU-devel \
@@ -29,9 +29,9 @@ RUN useradd -ms /bin/bash nistmni && \
 # add new cmake
 RUN mkdir src && \
     cd src && \
-    curl -L --output cmake-3.14.5.tar.gz https://github.com/Kitware/CMake/releases/download/v3.14.5/cmake-3.14.5.tar.gz  && \
-    tar zxf cmake-3.14.5.tar.gz && \
-    cd cmake-3.14.5 && \
+    curl -L --output cmake-3.17.3.tar.gz https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3.tar.gz  && \
+    tar zxf cmake-3.17.3.tar.gz && \
+    cd cmake-3.17.3 && \
     ./configure --prefix=/usr --no-qt-gui && \
     make && \
     make install && \

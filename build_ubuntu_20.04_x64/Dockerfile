@@ -1,5 +1,6 @@
-FROM i386/ubuntu:trusty
+FROM ubuntu:focal
 
+ENV DEBIAN_FRONTEND=noninteractive
 # install basic system packages
 RUN apt-get -y update && \
     apt-get -y dist-upgrade && \
@@ -12,7 +13,13 @@ RUN apt-get -y update && \
          libxmu6 libxmu-dev libxmu-headers \
          libgl1-mesa-dev libglu1-mesa-dev \
          libjpeg-dev \
-         libssl-dev ccache git lsb-release curl ca-certificates && \
+         libssl-dev ccache git lsb-release \
+         curl ca-certificates \
+         apt-transport-https ca-certificates gnupg software-properties-common wget && \
+    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && \
+    apt-add-repository 'deb https://apt.kitware.com/ubuntu/ focal main' -y && \
+    apt -y update && \
+    apt-get install -y --no-install-recommends cmake && \
     apt-get autoclean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -23,19 +30,6 @@ RUN useradd -ms /bin/bash nistmni && \
 
 ENV PATH=/usr/lib/ccache:$PATH
 
-# add new cmake
-RUN mkdir src && \
-    cd src && \
-    curl -L --output cmake-3.14.5.tar.gz https://github.com/Kitware/CMake/releases/download/v3.14.5/cmake-3.14.5.tar.gz  && \
-    tar zxf cmake-3.14.5.tar.gz && \
-    cd cmake-3.14.5 && \
-    ./configure --prefix=/usr --no-qt-gui && \
-    make && \
-    make install && \
-    cd ../../ && \
-    rm -rf src
-
 USER nistmni
 ENV HOME /home/nistmni
 WORKDIR /home/nistmni
-ENTRYPOINT ["/usr/bin/linux32", "--"]

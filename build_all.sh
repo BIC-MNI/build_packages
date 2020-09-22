@@ -1,6 +1,11 @@
-#! /bin/bash
+#!/bin/bash
 
 mkdir -p logs
+
+rm -rf minc-toolkit minc-toolkit-v2
+
+git clone --recursive --branch develop https://github.com/BIC-MNI/minc-toolkit.git minc-toolkit
+git clone --recursive --branch release-1.9.18 https://github.com/BIC-MNI/minc-toolkit-v2.git minc-toolkit-v2
 
 # iterate over minc-toolkit-v1 and -2
 for v in v1 v2;do
