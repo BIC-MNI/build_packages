@@ -15,7 +15,7 @@ RUN \
                    mesa-libGL-devel mesa-libGLU-devel \
                    libjpeg-turbo-devel openjpeg-devel \
                    openssl-devel rpm-build-libs \
-                   fedora-packager rpm-devel ccache perl-Test-AutoLoader.noarch && \
+                   fedora-packager rpm-devel ccache perl-Test-AutoLoader.noarch perl-AutoSplit.noarch && \
     yum -y autoremove && \
     yum -y clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/*
