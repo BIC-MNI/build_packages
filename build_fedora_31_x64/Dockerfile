@@ -9,7 +9,7 @@ RUN \
     rpmbuild -ba fake-lpr.spec && \
     yum -y install /root/rpmbuild/RPMS/noarch/fake-lpr-1.0-1.noarch.rpm && \
     yum -y install redhat-lsb-core bc which && \
-    yum -y --exclude=systemtap* --exclude=subversion* --exclude=gettext-devel* --exclude=intltool* --exclude=cairo* --exclude=swig* groupinstall 'Development Tools' && \
+    yum -y --exclude=gettext-devel* --exclude=intltool* --exclude=swig* groupinstall 'Development Tools' && \
     yum -y install gcc-c++ gcc-gfortran bison flex && \
     yum -y install sudo libX11-devel libXmu-devel libXi-devel \
                    mesa-libGL-devel mesa-libGLU-devel \
