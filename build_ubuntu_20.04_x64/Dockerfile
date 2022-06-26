@@ -9,7 +9,7 @@ RUN apt-get -y update && \
          build-essential g++ gfortran bc \
          bison flex \
          libx11-dev x11proto-core-dev \
-         libxi6 libxi-dev \
+         libxi6 libxi-dev libxrandr-dev libxrandr2 libxxf86vm-dev libxxf86vm1 \
          libxmu6 libxmu-dev libxmu-headers \
          libgl1-mesa-dev libglu1-mesa-dev \
          libjpeg-dev \
