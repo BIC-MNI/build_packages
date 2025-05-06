@@ -10,7 +10,7 @@ if [ -z $OUT ];then
 fi
 
 if [ -z $PARALLEL ];then
-  PARALLEL=3
+  PARALLEL=5
 fi
 
 echo "Running docker on $VM"
@@ -75,7 +75,7 @@ cmake ../../minc-toolkit-v2 \
 -DUSE_SYSTEM_ZLIB:BOOL=OFF  && \
 make -j${PARALLEL} &&
 cpack -G ${OUT} &&
-cp -v *.rpm *.deb ~/build/
+cp -v *.rpm *.deb *.tar.xz *.tar.bz2 *.tar.gz ~/build/
 # run tests separately
 make test > ~/build/test_${VM}_v2.txt
 END
